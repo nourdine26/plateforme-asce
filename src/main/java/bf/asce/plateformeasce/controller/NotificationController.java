@@ -1,0 +1,41 @@
+package bf.asce.plateformeasce.controller;
+
+import bf.asce.plateformeasce.entity.Notification;
+import bf.asce.plateformeasce.service.NotificationService;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import java.util.List;
+
+@RestController
+@RequestMapping("/api/notifications")
+public class NotificationController {
+
+    private final NotificationService notificationService;
+
+    public NotificationController(NotificationService notificationService) {
+        this.notificationService = notificationService;
+    }
+
+    @GetMapping
+    public List<Notification> getAllNotifications() {
+        return notificationService.getAllNotifications();
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Notification> getNotificationById(@PathVariable Long id) {
+        return notificationService.getNotificationById(id)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+
+    @PostMapping
+    public Notification createNotification(@RequestBody Notification notification) {
+        return notificationService.saveNotification(notification);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteNotification(@PathVariable Long id) {
+        notificationService.deleteNotification(id);
+        return ResponseEntity.noContent().build();
+    }
+}
