@@ -5,6 +5,7 @@ import bf.asce.plateformeasce.service.DirectionService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
+import org.springframework.security.access.prepost.PreAuthorize;
 
 @RestController
 @RequestMapping("/api/directions")
@@ -32,12 +33,14 @@ public class DirectionController {
 
     // POST /api/directions  -> créer une direction
     @PostMapping
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public Direction createDirection(@RequestBody Direction direction) {
         return directionService.saveDirection(direction);
     }
 
     // DELETE /api/directions/1  -> supprimer une direction
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<Void> deleteDirection(@PathVariable Long id) {
         directionService.deleteDirection(id);
         return ResponseEntity.noContent().build();
