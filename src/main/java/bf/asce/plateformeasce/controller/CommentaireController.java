@@ -5,6 +5,7 @@ import bf.asce.plateformeasce.service.CommentaireService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
+import org.springframework.security.access.prepost.PreAuthorize;
 
 @RestController
 @RequestMapping("/api/commentaires")
@@ -33,7 +34,8 @@ public class CommentaireController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    @PostMapping
+   @PostMapping
+    @PreAuthorize("hasAuthority('ROLE_RESPONSABLE_ASCE')")
     public Commentaire createCommentaire(@RequestBody Commentaire commentaire) {
         return commentaireService.saveCommentaire(commentaire);
     }

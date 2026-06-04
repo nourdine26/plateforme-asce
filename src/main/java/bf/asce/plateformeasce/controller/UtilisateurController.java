@@ -3,6 +3,7 @@ package bf.asce.plateformeasce.controller;
 import bf.asce.plateformeasce.entity.Utilisateur;
 import bf.asce.plateformeasce.service.UtilisateurService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
@@ -28,12 +29,14 @@ public class UtilisateurController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    @PostMapping
+ @PostMapping
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public Utilisateur createUtilisateur(@RequestBody Utilisateur utilisateur) {
         return utilisateurService.saveUtilisateur(utilisateur);
     }
 
-    @PutMapping("/{id}")
+   @PutMapping("/{id}")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<Utilisateur> updateUtilisateur(@PathVariable Long id, @RequestBody Utilisateur utilisateur) {
         return utilisateurService.getUtilisateurById(id)
                 .map(existant -> {
@@ -43,7 +46,8 @@ public class UtilisateurController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    @DeleteMapping("/{id}")
+   @DeleteMapping("/{id}")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<Void> deleteUtilisateur(@PathVariable Long id) {
         utilisateurService.deleteUtilisateur(id);
         return ResponseEntity.noContent().build();
