@@ -3,6 +3,7 @@ package bf.asce.plateformeasce.service;
 import bf.asce.plateformeasce.entity.Direction;
 import bf.asce.plateformeasce.repository.DirectionRepository;
 import org.springframework.stereotype.Service;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -10,10 +11,12 @@ import java.util.Optional;
 public class DirectionService {
 
     private final DirectionRepository directionRepository;
+    private final JournalSystemService journalSystemService;
 
-    // Injection de dépendances : Spring fournit le repository automatiquement
-    public DirectionService(DirectionRepository directionRepository) {
+    public DirectionService(DirectionRepository directionRepository,
+                            JournalSystemService journalSystemService) {
         this.directionRepository = directionRepository;
+        this.journalSystemService = journalSystemService;
     }
 
     // Récupérer toutes les directions
@@ -27,12 +30,23 @@ public class DirectionService {
     }
 
     // Créer ou mettre à jour une direction
-    public Direction saveDirection(Direction direction) {
-        return directionRepository.save(direction);
+    public Direction saveDirection(Direction direction, String email, String ip) {
+        Direction saved = directionRepository.save(direction);
+        journalSystemService.enregistrer(
+                "Création/modification direction : " + saved.getNom(),
+                ip,
+                email
+        );
+        return saved;
     }
 
     // Supprimer une direction par son id
-    public void deleteDirection(Long id) {
+    public void deleteDirection(Long id, String email, String ip) {
         directionRepository.deleteById(id);
+        journalSystemService.enregistrer(
+                "Suppression direction id : " + id,
+                ip,
+                email
+        );
     }
 }

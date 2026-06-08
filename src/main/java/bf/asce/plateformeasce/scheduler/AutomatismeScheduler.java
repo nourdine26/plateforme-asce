@@ -74,7 +74,7 @@ public class AutomatismeScheduler {
     }
 
     // Toutes les nuits à minuit : calculer les KPI
-    @Scheduled(cron = "0 0 0 * * *")
+@Scheduled(cron = "0 0 * * * *")
     public void calculerKpi() {
         log.info("=== Calcul des KPI ===");
         List<Activite> toutes = activiteRepository.findAll();
