@@ -7,6 +7,6 @@ import java.util.List;
 
 @Repository
 public interface SuiviActiviteRepository extends JpaRepository<SuiviActivite, Long> {
-
     List<SuiviActivite> findByActiviteId(Long activiteId);
+    void deleteByActiviteId(Long activiteId);
 }

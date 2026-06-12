@@ -6,4 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface AlerteRepository extends JpaRepository<Alerte, Long> {
+    void deleteByActiviteId(Long activiteId);
 }
